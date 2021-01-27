@@ -6,3 +6,4 @@ build
 
 # Ignore credentials
 titi.docx
+credentials.json
