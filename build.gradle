@@ -7,7 +7,7 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
-mainClassName = 'SheetsQuickstart'
+mainClassName = 'ClientApplicationView'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 version = '1.0'
@@ -20,4 +20,8 @@ dependencies {
     compile 'com.google.api-client:google-api-client:1.30.4'
     compile 'com.google.oauth-client:google-oauth-client-jetty:1.30.6'
     compile 'com.google.apis:google-api-services-sheets:v4-rev581-1.25.0'
+}
+
+run{
+    standardInput = System.in
 }

@@ -1,18 +1,5 @@
-// Copyright 2018 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+package controller;
 
-// [START sheets_quickstart]
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -37,18 +24,26 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class SheetsQuickstart {
-    private static final String APPLICATION_NAME = "Google Sheets API Java Quickstart";
+public class StudentController {
+
+    // [Start] CREDENTIALS and AUTHORISATION by OAuth
+    private static final String APPLICATION_NAME = "Java Client of Google Sheets API";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-    private static final String TOKENS_DIRECTORY_PATH = "tokens";
+    private static final String TOKENS_DIRECTORY_PATH = "tokens/";
 
     /**
-     * Global instance of the scopes required by this quickstart.
+     * Global instance of the scopes required.
+     * The chosen scope gives reading, and writing privileges.
+     *
+     * When first time users run the application, a browser window will open.
+     * Google will ask for login and to accept the scope privileges.
+     *
      * If modifying these scopes, delete your previously saved tokens/ folder.
+     * When starting the application again, Google will ask to accept the new privileges.
      */
     private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS);
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
-    private static final String valueInputOption = "USER_ENTERED";
+    private static String valueInputOption = "USER_ENTERED";
 
     /**
      * Creates an authorized Credential object.
@@ -58,7 +53,9 @@ public class SheetsQuickstart {
      */
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
         // Load client secrets.
-        InputStream in = SheetsQuickstart.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+        InputStream in = StudentController.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+
+        com.google.api.client.util.store.FileDataStoreFactory setPermissionsToOwnerOnly;
         if (in == null) {
             throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
         }
@@ -73,43 +70,50 @@ public class SheetsQuickstart {
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
+    // [End] CREDENTIALS and AUTHORISATION by OAuth
 
+
+    // ClientService - Google requires - Build a new authorized API client service.
     /**
-     * Prints the names and majors of students in a sample spreadsheet:
-     * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
+     * Exercise default parameters
+     * @param spreadsheetId = "1FefNWWy06XGLzil4GPIfgErGSb5ZhNVH_cuVYnLNIHo";
+     * @param range = "engenharia_de_software!A4:F27";
      */
-    public static void main(String... args) throws IOException, GeneralSecurityException {
-        // Build a new authorized API client service.
+    public Sheets clientService(String spreadsheetId,
+                                String range) throws IOException, GeneralSecurityException {
+
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        final String spreadsheetId = "1FefNWWy06XGLzil4GPIfgErGSb5ZhNVH_cuVYnLNIHo";
-        String range = "engenharia_de_software!A4:F27";
-        Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+        Sheets clientService = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
 
-        // Comment in and out Reading
-        // Reads values in the spreadsheet
-        /*ValueRange response = service.spreadsheets().values()
-                .get(spreadsheetId, range)
-                .execute();
-        List<List<Object>> values = response.getValues();
-        if (values == null || values.isEmpty()) {
-            System.out.println("No data found.");
-        } else {
-            System.out.println("Matricula, Nome");
-            for (List row : values) {
-                // Print columns A and E, which correspond to indices 0 and 4.
-                System.out.printf("%s, %s\n", row.get(0), row.get(1));
-            }
-        }*/
+        return clientService;
+    }
 
-        // Comment in and out Writing
-        // Writes values in the spreadsheet
+
+    //  [Start] Methods TODO
+
+        /**
+        * Reads values in the spreadsheet.
+        */
+        public List<List<Object>> readSheet(Sheets clientService,
+                                            String spreadsheetId,
+                                            String range) throws IOException {
+
+            ValueRange response = clientService.spreadsheets().values()
+                    .get(spreadsheetId, range)
+                    .execute();
+            List<List<Object>> values = response.getValues();
+            return values;
+        }
+        // Comment in and out Writing.
+        // Writes values in the spreadsheet.
         //
-        List<List<Object>> writingValues = Arrays.asList( // this array is a row
-                Arrays.asList( // this array are the cell ex.: { 1, 2, 3, 4 }
-                        35,63,61),
-                Arrays.asList( 64,  97, 36 ),
+
+/*
+        List<List<Object>> writingValues = Arrays.asList( // This array is a row.
+                Arrays.asList( 35,  63, 61 ), // This array are the cell ex.: ( 1, 2, 3, 4 )
+                Arrays.asList( 64,  97, 36 ), // or or ( "John, "Michel", "Peter"). They make the columns.
                 Arrays.asList( 68,	74,	51 ),
                 Arrays.asList( 66,	98,	62 ),
                 Arrays.asList( 80,	65,	41 ),
@@ -122,7 +126,7 @@ public class SheetsQuickstart {
         ValueRange body = new ValueRange()
                 .setValues(writingValues);
         UpdateValuesResponse result =
-                service.spreadsheets().values().update(spreadsheetId, range, body)
+                clientService.spreadsheets().values().update(spreadsheetId, range, body)
                         .setValueInputOption(valueInputOption)
                         .execute();
         System.out.printf("%d cells updated.", result.getUpdatedCells());
@@ -130,5 +134,6 @@ public class SheetsQuickstart {
 
 
     }
+*/
+    //  [End] Methods
 }
-// [END sheets_quickstart]
