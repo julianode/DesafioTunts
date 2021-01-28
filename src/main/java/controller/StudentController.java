@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -72,9 +71,9 @@ public class StudentController {
     }
     // [End] CREDENTIALS and AUTHORISATION by OAuth
 
-
-    // ClientService - Google requires - Build a new authorized API client service.
     /**
+     * ClientService - Google requires - Build a new authorized API client service.
+     *
      * Exercise default parameters
      * @param spreadsheetId = "1FefNWWy06XGLzil4GPIfgErGSb5ZhNVH_cuVYnLNIHo";
      * @param range = "engenharia_de_software!A4:F27";
@@ -91,27 +90,30 @@ public class StudentController {
     }
 
 
-    //  [Start] Methods TODO
-
-        /**
-        * Reads values in the spreadsheet.
-        */
-        public List<List<Object>> readSheet(Sheets clientService,
+    /**
+    * Reads values in the spreadsheet.
+    */
+    public List<List<Object>> readSheet(Sheets clientService,
                                             String spreadsheetId,
                                             String range) throws IOException {
 
-            ValueRange response = clientService.spreadsheets().values()
+        ValueRange response = clientService.spreadsheets().values()
                     .get(spreadsheetId, range)
                     .execute();
-            List<List<Object>> values = response.getValues();
-            return values;
-        }
-        // Comment in and out Writing.
-        // Writes values in the spreadsheet.
-        //
+        List<List<Object>> values = response.getValues();
+        return values;
+    }
 
-/*
-        List<List<Object>> writingValues = Arrays.asList( // This array is a row.
+    /**
+    * Writes values in the spreadsheet.
+    */
+    public UpdateValuesResponse writeData(String spreadsheetId,
+                              String range,
+                              List<List<Object>> writingValues,
+                              Sheets clientService) throws IOException {
+
+            /* Example of hard coded data.
+            writingValues = Arrays.asList( // This array is a row.
                 Arrays.asList( 35,  63, 61 ), // This array are the cell ex.: ( 1, 2, 3, 4 )
                 Arrays.asList( 64,  97, 36 ), // or or ( "John, "Michel", "Peter"). They make the columns.
                 Arrays.asList( 68,	74,	51 ),
@@ -119,9 +121,8 @@ public class StudentController {
                 Arrays.asList( 80,	65,	41 ),
                 Arrays.asList( 83,	68,	77 ),
                 Arrays.asList( 38,	53,	80 )
-        );
-
-        range = "engenharia_de_software!D4:F";
+               );
+             */
 
         ValueRange body = new ValueRange()
                 .setValues(writingValues);
@@ -129,11 +130,6 @@ public class StudentController {
                 clientService.spreadsheets().values().update(spreadsheetId, range, body)
                         .setValueInputOption(valueInputOption)
                         .execute();
-        System.out.printf("%d cells updated.", result.getUpdatedCells());
-
-
-
+        return result;
     }
-*/
-    //  [End] Methods
 }

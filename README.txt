@@ -6,6 +6,12 @@ Criar uma aplicação em uma linguagem de programação de sua preferência (caso est
 ## REGRAS: 
 Calcular a situação de cada aluno baseado na média das 3 provas (P1, P2 e P3), conforme a tabela: 
 
+Média (m) | Situação
+m<5         Reprovado por Nota
+5<=m<7      Exame Final
+m>=7        Aprovado
+
+
 Caso o número de faltas ultrapasse 25% do número total de aulas o aluno terá a situação "Reprovado por Falta", independente da média.
 
 Caso a situação seja "Exame Final" é necessário calcular a "Nota para Aprovação Final"(naf) de cada aluno de acordo com seguinte fórmula: 

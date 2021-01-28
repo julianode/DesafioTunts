@@ -1,4 +1,8 @@
+import service.CalculatingService;
 import service.ReadingService;
+import service.WritingService;
+
+import java.util.List;
 
 /**
  * Java Client of Google Sheets API
@@ -41,20 +45,23 @@ public class ClientApplicationView {
         System.out.println("(meaning: sheet_you_want ! rectangle_left_upper_corner : rectangle_right_lower_corner)\n");
 
         System.out.println("Now, doing Reading Setup\n\n");
-        ReadingService readingService = new ReadingService();
-        readingService.readingSetUp(spreadsheetId, range);
+        ReadingService readingService = new ReadingService(spreadsheetId, range);
+        readingService.readingSetUp();
 
         System.out.println("\n"); // just for spacing
         System.out.println("Now, reading the spreadsheet\n\n");
-        readingService.listAll(spreadsheetId, range);
+        List<List<Object>> resultsList = readingService.listAll(); // raw data
 
+        System.out.println("Now, calculating the values\n\n");
+        CalculatingService calculatingService = new CalculatingService(resultsList);
+        List<List<Object>> writingValues = calculatingService.situation(); // treated data
 
+        System.out.println("\n"); // just for spacing
+        System.out.println("Now, writing on the spreadsheet\n\n");
+        range = "engenharia_de_software!A4:H27"; //TODO this is hard coded, make a bigger range from the default one;
+        WritingService writingService = new WritingService(spreadsheetId, range);
+        writingService.writeData(writingValues);
 
-
-
-
-
-
-
+        System.out.println("All done!");
     }
 }

@@ -5,12 +5,21 @@ import controller.StudentController;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class ReadingService {
 
-    public void readingSetUp(String spreadsheetId, String range) {
+    private String spreadsheetId;
+    private String range;
+
+    public ReadingService(String spreadsheetId, String range) {
+        this.spreadsheetId = spreadsheetId;
+        this.range = range;
+    }
+
+    public void readingSetUp() {
 
         boolean changedFromDefault = false;
 
@@ -51,7 +60,10 @@ public class ReadingService {
     }
 
 
-    public void listAll(String spreadsheetId, String range) {
+    public List<List<Object>> listAll() {
+
+        List<List<Object>> resultsList = new ArrayList();
+
         try {
             /**
              * There will be a Warnning here. This is due to Windows use.
@@ -80,6 +92,7 @@ public class ReadingService {
                             row.get(2), row.get(3), row.get(4), row.get(5));
                 }
             }
+            resultsList = values;
         }
         catch (IOException ioExcep) {
             System.err.println("Something went wrong, please try again. Java class: " + ioExcep.toString());
@@ -88,6 +101,6 @@ public class ReadingService {
             System.err.println("Something went wrong, please try again. Java class: " + gsExcep.toString());
         }
 
+        return resultsList;
     }
-
 }
