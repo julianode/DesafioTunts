@@ -28,11 +28,8 @@ public class WritingService {
             System.out.println("\n"); //just for spacing
             System.out.printf("%d cells updated. ", result.getUpdatedCells());
         }
-        catch (IOException ioExcep) {
-            System.err.println("Something went wrong, please try again. Java class: " + ioExcep.toString());
-        }
-        catch (GeneralSecurityException gsExcep) {
-            System.err.println("Something went wrong, please try again. Java class: " + gsExcep.toString());
+        catch (IOException | GeneralSecurityException excep) {
+            System.err.println("Something went wrong, please try again. Java class: " + excep.toString());
         }
     }
 }

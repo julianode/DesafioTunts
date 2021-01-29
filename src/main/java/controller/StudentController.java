@@ -101,6 +101,7 @@ public class StudentController {
                     .get(spreadsheetId, range)
                     .execute();
         List<List<Object>> values = response.getValues();
+
         return values;
     }
 
@@ -130,6 +131,7 @@ public class StudentController {
                 clientService.spreadsheets().values().update(spreadsheetId, range, body)
                         .setValueInputOption(valueInputOption)
                         .execute();
+
         return result;
     }
 }

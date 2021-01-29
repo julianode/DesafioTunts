@@ -53,6 +53,7 @@ public class ClientApplicationView {
         List<List<Object>> resultsList = readingService.listAll(); // raw data
 
         System.out.println("Now, calculating the values\n\n");
+        readingService.setLectures();
         CalculatingService calculatingService = new CalculatingService(resultsList);
         List<List<Object>> writingValues = calculatingService.situation(); // treated data
 

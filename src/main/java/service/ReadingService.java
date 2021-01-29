@@ -13,6 +13,7 @@ public class ReadingService {
 
     private String spreadsheetId;
     private String range;
+    private static String lectures;
 
     public ReadingService(String spreadsheetId, String range) {
         this.spreadsheetId = spreadsheetId;
@@ -62,11 +63,11 @@ public class ReadingService {
 
     public List<List<Object>> listAll() {
 
-        List<List<Object>> resultsList = new ArrayList();
+        List<List<Object>> resultsList = new ArrayList<>();
 
         try {
             /**
-             * There will be a Warnning here. This is due to Windows use.
+             * There will be a Warning here. This is due to Windows use.
              *
              * My search conclusion is:
              * The Google library deals with POSIX systems and are not well set for Windows.
@@ -83,7 +84,7 @@ public class ReadingService {
             } else {
                 System.out.println(""); // just to get space from the warning
                 System.out.println(values.size() + " student(s) found."); // just to get space from the warning
-                for (List row : values) {
+                for (List<Object> row : values) {
                     // Prints Matrícula and Aluno, then a table with other fields.
                     System.out.println("Mat., Aluno");
                     System.out.printf(" %s , %s\n", row.get(0), row.get(1));
@@ -94,13 +95,41 @@ public class ReadingService {
             }
             resultsList = values;
         }
-        catch (IOException ioExcep) {
-            System.err.println("Something went wrong, please try again. Java class: " + ioExcep.toString());
-        }
-        catch (GeneralSecurityException gsExcep) {
-            System.err.println("Something went wrong, please try again. Java class: " + gsExcep.toString());
+        catch (IOException | GeneralSecurityException excep) {
+            System.err.println("Something went wrong, please try again. Java class: " + excep.toString());
         }
 
         return resultsList;
+    }
+
+    public void setLectures() {
+
+        String lectureRange = range.substring(0,23) + "A2"; // "engenharia_de_software!A2"
+
+        try {
+            StudentController studentController = new StudentController();
+            Sheets clientService = studentController.clientService(spreadsheetId, lectureRange);
+
+            List<List<Object>> values = studentController.readSheet(clientService, spreadsheetId, lectureRange);
+            if (values == null || values.isEmpty()) {
+                System.out.println("No data found.");
+            } else {
+                System.out.println(""); // just to get space from the warning
+                System.out.println(values.size() + " - lectures found."); // just to get space from the warning
+                for (List<Object> row : values) {
+                    ReadingService.lectures = (String) row.get(0);
+                }
+            }
+        }
+        catch (IOException | GeneralSecurityException excep) {
+            System.err.println("Something went wrong, please try again. Java class: " + excep.toString());
+        }
+    }
+
+    public static int getLectures() {
+
+        int intLectures = Integer.parseInt(lectures.substring(28,30)); // 60
+
+        return intLectures;
     }
 }

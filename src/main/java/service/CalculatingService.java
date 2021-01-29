@@ -17,7 +17,7 @@ public class CalculatingService {
 
         List<List<Object>> writingValues = new ArrayList<>();
 
-        int lectures = 60; //TODO hard coded, get it from reading the A2 cell of the spreadsheet;
+        int lectures = ReadingService.getLectures(); // 60
         int numberOfStudents = resultsList.size();
         int countDone = 0;
 
@@ -30,6 +30,7 @@ public class CalculatingService {
             int thresholdFaltas = (int)Math.round(0.25 * lectures);
             if (Integer.parseInt(student.getFaltas()) > thresholdFaltas) {
                 student.setSituacao("Reprovado por Falta");
+                student.setNaf("0");
             }
             //TODO THERE IS A BUG HERE. MEDIA IS NOT CORRECTLY CALCULATED
             int media = Math.round((Integer.parseInt(student.getP1())
