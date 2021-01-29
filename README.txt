@@ -113,20 +113,7 @@ The name of the file must be "credentials.json" (hard coded this way).
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-## DESAFIO (texto original)
+## DESAFIO (enunciado do texto original)
 Criar uma aplicação em uma linguagem de programação de sua preferência (caso esteja se candidatando a uma vaga de linguagem de programação específica, exemplo: programador node.js, utilizar a linguagem/tecnologia específica da vaga). A aplicação deve ser capaz de ler uma planilha do google sheets, buscar as informações necessárias, calcular e escrever o resultado na planilha.
 
 ## REGRAS: 
