@@ -26,3 +26,7 @@ dependencies {
 run{
     standardInput = System.in
 }
+
+application{
+    mainClass = 'ClientApplicationView'
+}

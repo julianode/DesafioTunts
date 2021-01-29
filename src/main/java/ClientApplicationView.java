@@ -39,12 +39,11 @@ public class ClientApplicationView {
         System.out.println("\nThe target selection area is: " + range);
         System.out.println("(meaning: sheet_you_want ! rectangle_left_upper_corner : rectangle_right_lower_corner)\n");
 
-        System.out.println("Now, doing Reading Setup\n\n");
+        System.out.println("Now, doing Reading Setup\n");
         ReadingService readingService = new ReadingService(spreadsheetId, range);
         readingService.readingSetUp();
 
-        System.out.println("\n"); // just for spacing
-        System.out.println("Now, reading the spreadsheet\n\n");
+        System.out.println("Now, reading the spreadsheet\n");
         List<List<Object>> resultsList = readingService.listAll(); // raw data
 
         System.out.println("Now, calculating the values\n\n");
@@ -52,9 +51,8 @@ public class ClientApplicationView {
         CalculatingService calculatingService = new CalculatingService(resultsList);
         List<List<Object>> writingValues = calculatingService.studentSituation(); // treated data
 
-        System.out.println("\n"); // just for spacing
         System.out.println("Now, writing on the spreadsheet\n\n");
-        range = "engenharia_de_software!A4:H27";
+        range = "engenharia_de_software!G4:H27";
         WritingService writingService = new WritingService(spreadsheetId, range);
         writingService.writeData(writingValues);
 

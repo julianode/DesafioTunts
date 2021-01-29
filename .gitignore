@@ -3,7 +3,13 @@
 .idea
 
 # Ignore Gradle build output directory
-build
+build/classes
+build/docs
+build/generated
+build/libs
+build/resources
+build/scripts
+build/tmp
 tokens
 
 # Ignore credentials

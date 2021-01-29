@@ -35,19 +35,22 @@ public class CalculatingService {
 
         List<List<Object>> writingValues = new ArrayList<>();
 
+
         int numberOfStudents = resultsList.size();
         int countDone = 0;
 
         for (List<Object> row : resultsList) {
 
+            List<Object> situationResults = new ArrayList<>();
+
             Student student = new Student();
 
             student.setSituation(row);
 
-            row.add(student.getSituacao());
-            row.add(student.getNaf());
+            situationResults.add(student.getSituacao());
+            situationResults.add(student.getNaf());
 
-            writingValues.add(row);
+            writingValues.add(situationResults);
 
             countDone++;
             System.out.println(countDone + " of " + numberOfStudents + " done. ");

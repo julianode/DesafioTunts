@@ -119,19 +119,6 @@ public class StudentController {
                               String range,
                               List<List<Object>> writingValues,
                               Sheets clientService) throws IOException {
-
-            /* Example of hard coded data.
-            writingValues = Arrays.asList( // This array is a row.
-                Arrays.asList( 35,  63, 61 ), // This array are the cell ex.: ( 1, 2, 3, 4 )
-                Arrays.asList( 64,  97, 36 ), // or or ( "John, "Michel", "Peter"). They make the columns.
-                Arrays.asList( 68,	74,	51 ),
-                Arrays.asList( 66,	98,	62 ),
-                Arrays.asList( 80,	65,	41 ),
-                Arrays.asList( 83,	68,	77 ),
-                Arrays.asList( 38,	53,	80 )
-               );
-             */
-
         ValueRange body = new ValueRange()
                 .setValues(writingValues);
         return clientService.spreadsheets().values().update(spreadsheetId, range, body)

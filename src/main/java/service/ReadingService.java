@@ -44,7 +44,6 @@ public class ReadingService {
         try (Scanner input = new Scanner(System.in)) {
             System.out.println("Would you like to change the target Spreadsheet? y / n");
             System.out.println("Note that you must be the owner of the spreadsheet to edit it.");
-            System.out.println("You must have your own credentials to access the API (check README file).");
             System.out.println("Google will ask you for permission to edit your Drive document (login in browser).");
             String wantsNewSpreadsheet = input.next();
 
