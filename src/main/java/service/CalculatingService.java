@@ -1,74 +1,56 @@
+/**
+ * Java Client of Google Sheets API
+ *
+ * @author Juliano Suman Curti
+ * @creationDate january 2021
+ * @version 0.1.0
+ *
+ * @license MIT License
+ * @repository https://github.com/julianode/DesafioTunts
+ *
+ * @credentials One must have his own credentials to use the Google API service (OAuth).
+ * Check src\resources\place_your_credentials_ here-README.txt for instructions.
+ *
+ * @service
+ * CalculatingService has the application logic for delivering the data to be written
+ *
+ */
 package service;
 
 import model.Student;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CalculatingService {
 
-    private List<List<Object>> resultsList;
+    private final List<List<Object>> resultsList;
 
-    public CalculatingService(List<List<Object>> resultsList) {
+    public CalculatingService(@NotNull List<List<Object>> resultsList) {
         this.resultsList = resultsList;
     }
 
-    public List<List<Object>> situation() {
+    public List<List<Object>> studentSituation() {
 
         List<List<Object>> writingValues = new ArrayList<>();
 
-        int lectures = ReadingService.getLectures(); // 60
         int numberOfStudents = resultsList.size();
         int countDone = 0;
 
-        for (List row : resultsList) {
+        for (List<Object> row : resultsList) {
 
-            Student student = new Student((String)row.get(0), (String)row.get(1),
-                                          (String)row.get(2), (String)row.get(3),
-                                          (String)row.get(4), (String)row.get(5));
+            Student student = new Student();
 
-            int thresholdFaltas = (int)Math.round(0.25 * lectures);
-            if (Integer.parseInt(student.getFaltas()) > thresholdFaltas) {
-                student.setSituacao("Reprovado por Falta");
-                student.setNaf("0");
-            }
-            //TODO THERE IS A BUG HERE. MEDIA IS NOT CORRECTLY CALCULATED
-            int media = Math.round((Integer.parseInt(student.getP1())
-                    + Integer.parseInt(student.getP1())
-                    + Integer.parseInt(student.getP1())) / 3);
+            student.setSituation(row);
 
-            if (media < 50) {
-                student.setSituacao("Reprovado por Nota");
-                student.setNaf("0");
+            row.add(student.getSituacao());
+            row.add(student.getNaf());
 
-            } else {
-                if (media < 70) {
-                    student.setSituacao("Exame Final");
-                    student.setNaf(Integer.toString(100-media));
-
-                } else {
-                    if (media >= 70) {
-                        student.setSituacao("Aprovado");
-                        student.setNaf("0");
-                    }
-                }
-            }
-
-            List<Object> objectRow = new ArrayList();
-            objectRow.add(student.getMatricula());
-            objectRow.add(student.getAluno());
-            objectRow.add(student.getFaltas());
-            objectRow.add(student.getP1());
-            objectRow.add(student.getP2());
-            objectRow.add(student.getP3());
-            objectRow.add(student.getSituacao());
-            objectRow.add(student.getNaf());
-
-            writingValues.add(objectRow);
+            writingValues.add(row);
 
             countDone++;
-            System.out.println(countDone + " of " + numberOfStudents + " done. Média: "
-                    + media + " do aluno " + student.getAluno());
+            System.out.println(countDone + " of " + numberOfStudents + " done. ");
         }
         return writingValues;
     }

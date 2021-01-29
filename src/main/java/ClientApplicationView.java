@@ -1,20 +1,14 @@
-import service.CalculatingService;
-import service.ReadingService;
-import service.WritingService;
-
-import java.util.List;
-
 /**
  * Java Client of Google Sheets API
  *
  * @author Juliano Suman Curti
- * @creationDate 2021/01/28
+ * @creationDate january 2021
  * @version 0.1.0
  *
  * @license MIT License
  * @repository https://github.com/julianode/DesafioTunts
  *
- * @Documented
+ * @Description
  * This is a client application to consume Google Sheets API.
  * It is part of Tunts assessment for Java Back-end Developer position.
  * The architecture pattern applied is MVCS - (Model View Controller Service).
@@ -27,15 +21,16 @@ import java.util.List;
  *
  */
 
+import service.CalculatingService;
+import service.ReadingService;
+import service.WritingService;
+
+import java.util.List;
+
 public class ClientApplicationView {
 
     public static void main(String[] args) {
 
-        /**
-         * Exercise default parameters
-         * @param spreadsheetId = "1FefNWWy06XGLzil4GPIfgErGSb5ZhNVH_cuVYnLNIHo";
-         * @param range = "engenharia_de_software!A4:F27";
-         */
         String spreadsheetId = "1FefNWWy06XGLzil4GPIfgErGSb5ZhNVH_cuVYnLNIHo";
         String range = "engenharia_de_software!A4:F27";
 
@@ -55,11 +50,11 @@ public class ClientApplicationView {
         System.out.println("Now, calculating the values\n\n");
         readingService.setLectures();
         CalculatingService calculatingService = new CalculatingService(resultsList);
-        List<List<Object>> writingValues = calculatingService.situation(); // treated data
+        List<List<Object>> writingValues = calculatingService.studentSituation(); // treated data
 
         System.out.println("\n"); // just for spacing
         System.out.println("Now, writing on the spreadsheet\n\n");
-        range = "engenharia_de_software!A4:H27"; //TODO this is hard coded, make a bigger range from the default one;
+        range = "engenharia_de_software!A4:H27";
         WritingService writingService = new WritingService(spreadsheetId, range);
         writingService.writeData(writingValues);
 

@@ -1,3 +1,20 @@
+/**
+ * Java Client of Google Sheets API
+ *
+ * @author Juliano Suman Curti
+ * @creationDate january 2021
+ * @version 0.1.0
+ *
+ * @license MIT License
+ * @repository https://github.com/julianode/DesafioTunts
+ *
+ * @credentials One must have his own credentials to use the Google API service (OAuth).
+ * Check src\resources\place_your_credentials_ here-README.txt for instructions.
+ *
+ * @controller
+ * StudentController has the application logic for connecting to the Google Sheet API
+ *
+ */
 package controller;
 
 import com.google.api.client.auth.oauth2.Credential;
@@ -42,7 +59,7 @@ public class StudentController {
      */
     private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS);
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
-    private static String valueInputOption = "USER_ENTERED";
+    private static final String VALUE_INPUT_OPTION = "USER_ENTERED";
 
     /**
      * Creates an authorized Credential object.
@@ -54,7 +71,6 @@ public class StudentController {
         // Load client secrets.
         InputStream in = StudentController.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
 
-        com.google.api.client.util.store.FileDataStoreFactory setPermissionsToOwnerOnly;
         if (in == null) {
             throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
         }
@@ -73,20 +89,13 @@ public class StudentController {
 
     /**
      * ClientService - Google requires - Build a new authorized API client service.
-     *
-     * Exercise default parameters
-     * @param spreadsheetId = "1FefNWWy06XGLzil4GPIfgErGSb5ZhNVH_cuVYnLNIHo";
-     * @param range = "engenharia_de_software!A4:F27";
      */
-    public Sheets clientService(String spreadsheetId,
-                                String range) throws IOException, GeneralSecurityException {
+    public Sheets clientService() throws IOException, GeneralSecurityException {
 
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        Sheets clientService = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+        return new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
-
-        return clientService;
     }
 
 
@@ -100,9 +109,7 @@ public class StudentController {
         ValueRange response = clientService.spreadsheets().values()
                     .get(spreadsheetId, range)
                     .execute();
-        List<List<Object>> values = response.getValues();
-
-        return values;
+        return response.getValues();
     }
 
     /**
@@ -127,11 +134,8 @@ public class StudentController {
 
         ValueRange body = new ValueRange()
                 .setValues(writingValues);
-        UpdateValuesResponse result =
-                clientService.spreadsheets().values().update(spreadsheetId, range, body)
-                        .setValueInputOption(valueInputOption)
+        return clientService.spreadsheets().values().update(spreadsheetId, range, body)
+                        .setValueInputOption(VALUE_INPUT_OPTION)
                         .execute();
-
-        return result;
     }
 }

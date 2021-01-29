@@ -1,3 +1,20 @@
+/**
+ * Java Client of Google Sheets API
+ *
+ * @author Juliano Suman Curti
+ * @creationDate january 2021
+ * @version 0.1.0
+ *
+ * @license MIT License
+ * @repository https://github.com/julianode/DesafioTunts
+ *
+ * @credentials One must have his own credentials to use the Google API service (OAuth).
+ * Check src\resources\place_your_credentials_ here-README.txt for instructions.
+ *
+ * @service
+ * ReadingService has the application logic for reading the data from the sheet
+ *
+ */
 package service;
 
 import com.google.api.services.sheets.v4.Sheets;
@@ -12,7 +29,7 @@ import java.util.Scanner;
 public class ReadingService {
 
     private String spreadsheetId;
-    private String range;
+    private final String range;
     private static String lectures;
 
     public ReadingService(String spreadsheetId, String range) {
@@ -26,6 +43,9 @@ public class ReadingService {
 
         try (Scanner input = new Scanner(System.in)) {
             System.out.println("Would you like to change the target Spreadsheet? y / n");
+            System.out.println("Note that you must be the owner of the spreadsheet to edit it.");
+            System.out.println("You must have your own credentials to access the API (check README file).");
+            System.out.println("Google will ask you for permission to edit your Drive document (login in browser).");
             String wantsNewSpreadsheet = input.next();
 
             if (wantsNewSpreadsheet.equals("y")) {
@@ -34,26 +54,14 @@ public class ReadingService {
                 changedFromDefault = true;
 
             } else {
-                System.out.println("Ok, using default Spreadsheet ID. \n");
-            }
-
-            System.out.println("Would you like to change the target selection area? y / n");
-            String wantsNewSelectionArea = input.next();
-
-            if (wantsNewSelectionArea.equals("y")) {
-                System.out.print("Using the model showed above, please insert new target selection area: ");
-                range = input.next();
-                changedFromDefault = true;
-
-            } else {
-                System.out.println("Ok, using default selection area. \n");
+                System.out.println("Ok, using default Spreadsheet ID.\n");
             }
 
         } catch (Exception e) {
             System.err.println("Something went wrong, please try again.");
         }
 
-        if (changedFromDefault == true) {
+        if (changedFromDefault) {
             System.out.println("\n");
             System.out.println("The target Spreadsheet ID is: " + spreadsheetId);
             System.out.println("The target selection area is: " + range);
@@ -76,7 +84,7 @@ public class ReadingService {
              * I tried to use @SuppressWarnings("uncheck"), and "deprecation" too, but I was not successful.
              */
             StudentController studentController = new StudentController();
-            Sheets clientService = studentController.clientService(spreadsheetId, range);
+            Sheets clientService = studentController.clientService();
 
             List<List<Object>> values = studentController.readSheet(clientService, spreadsheetId, range);
             if (values == null || values.isEmpty()) {
@@ -108,14 +116,14 @@ public class ReadingService {
 
         try {
             StudentController studentController = new StudentController();
-            Sheets clientService = studentController.clientService(spreadsheetId, lectureRange);
+            Sheets clientService = studentController.clientService();
 
             List<List<Object>> values = studentController.readSheet(clientService, spreadsheetId, lectureRange);
             if (values == null || values.isEmpty()) {
                 System.out.println("No data found.");
             } else {
                 System.out.println(""); // just to get space from the warning
-                System.out.println(values.size() + " - lectures found."); // just to get space from the warning
+                System.out.println("Lectures found."); // just to get space from the warning
                 for (List<Object> row : values) {
                     ReadingService.lectures = (String) row.get(0);
                 }
@@ -128,8 +136,6 @@ public class ReadingService {
 
     public static int getLectures() {
 
-        int intLectures = Integer.parseInt(lectures.substring(28,30)); // 60
-
-        return intLectures;
+        return Integer.parseInt(lectures.substring(28,30)); // 60
     }
 }

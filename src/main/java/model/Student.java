@@ -1,92 +1,79 @@
+/**
+ * Java Client of Google Sheets API
+ *
+ * @author Juliano Suman Curti
+ * @creationDate january 2021
+ * @version 0.1.0
+ *
+ * @license MIT License
+ * @repository https://github.com/julianode/DesafioTunts
+ *
+ * @credentials One must have his own credentials to use the Google API service (OAuth).
+ * Check src\resources\place_your_credentials_ here-README.txt for instructions.
+ *
+ * @entity
+ * Student has the business logic for the the object's state and behaviour
+ *
+ */
 package model;
+
+import org.jetbrains.annotations.NotNull;
+import service.ReadingService;
 
 import java.util.List;
 
 public class Student {
 
-    private String matricula;
-    private String aluno;
-    private String faltas;
-    private String p1;
-    private String p2;
-    private String p3;
     private String situacao;
-    private String naf; //Nota para Aprovação Final
+    private String naf;
 
-    public Student(String matricula, String aluno, String faltas,
-                   String p1,        String p2,    String p3) {
 
-        this.matricula = matricula;
-        this.aluno = aluno;
-        this.faltas = faltas;
-        this.p1 = p1;
-        this.p2 = p2;
-        this.p3 = p3;
-        this.situacao = "";
-        this.naf = "";
-    }
-
-    public String getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
-    }
-
-    public String getAluno() {
-        return aluno;
-    }
-
-    public void setAluno(String aluno) {
-        this.aluno = aluno;
-    }
-
-    public String getFaltas() {
-        return faltas;
-    }
-
-    public void setFaltas(String faltas) {
-        this.faltas = faltas;
-    }
-
-    public String getP1() {
-        return p1;
-    }
-
-    public void setP1(String p1) {
-        this.p1 = p1;
-    }
-
-    public String getP2() {
-        return p2;
-    }
-
-    public void setP2(String p2) {
-        this.p2 = p2;
-    }
-
-    public String getP3() {
-        return p3;
-    }
-
-    public void setP3(String p3) {
-        this.p3 = p3;
+    public Student(){
+        situacao = "";
+        naf = "";
     }
 
     public String getSituacao() {
         return situacao;
     }
 
-    public void setSituacao(String situacao) {
-        this.situacao = situacao;
-    }
-
     public String getNaf() {
         return naf;
     }
 
-    public void setNaf(String naf) {
-        this.naf = naf;
+    public void setSituation(@NotNull List<Object> row) {
+
+        int lectures = ReadingService.getLectures(); // 60
+
+        int thresholdFaltas = (int)Math.round(0.25 * lectures);
+        int faltas = Integer.parseInt((String)row.get(2));
+
+        if ( faltas > thresholdFaltas ) {
+            situacao = "Reprovado por Falta";
+            naf = "0";
+        } else {
+
+            float p1 = Float.parseFloat((String) row.get(3));
+            float p2 = Float.parseFloat((String) row.get(4));
+            float p3 = Float.parseFloat((String) row.get(5));
+
+            int media = Math.round((p1 + p2 + p3) / 3);
+
+            if (media < 50) {
+                situacao = "Reprovado por Nota";
+                naf = "0";
+
+            } else {
+                if (media < 70) {
+                    situacao = "Exame Final";
+                    naf = Integer.toString(100 - media);
+
+                } else { // (media >= 70)
+                    situacao = "Aprovado";
+                    naf = "0";
+
+                }
+            }
+        }
     }
 }
