@@ -6,16 +6,19 @@ A minha planilha está no endereço:
 
 Esta é a planilha por padrão (default) que a applicação vai ler, calcular e escrever nela.
 Ao usar outra planilha, a mesma deve seguir o mesmo padrão de layout da mostrada acima.
-Afinal, o aplicativo esperar ler e escrever em colunas definidas.
+Afinal, o aplicativo espera ler e escrever em colunas definidas.
 
 
 ## O que a aplicação faz
 
 Ao inicializar o programa vai perguntar se você quer ler outra planilha. 
 
-Se a reposta for não (digite a letra "n" e tecle enter), ele vai ler a planilha padrão, mas não vai escrever nela. Isso é porque o Google só deixa o dono do arquivo alterar o mesmo.
+Se a reposta for não (digite a letra "n" e tecle enter), ele vai ler a planilha padrão.
 
-Portanto, você deve usar a aplicação em planilhas das quais você é o dono, ou tem permissão de editar.
+Sugiro que alguém deve usar a aplicação em planilhas das quais se é o dono, ou tem permissão de editar.
+
+No caso deste exercício, a panilha que está como padrão é minha.
+Mas deixei a permissão de editar para qualquer pessoa.
 
 Quando o programa pedir para inserir o ID da planilha que você quer usar, digite "y" e tecle enter.
 
@@ -24,12 +27,13 @@ Ex.:  https://docs.google.com/spreadsheets/d/AQUI_ESTÁ_O_ID_DA_PLANILHA/
 
 Depois, tecle enter e o aplicativo vai rodar.
 
-O seu navegador padrão irá abrir e o Google pedirá para que faça login e dê permissão ao aplicativo para editar seus documentos no Google DRIVE.
+O seu navegador padrão irá abrir e o Google pedirá para que faça login e dê permissão ao aplicativo para editar os documentos no Google DRIVE.
 Use as opções avançadas da página de segurança. Essas são as letras miúdas no fim da tela.
 
-Com a permissão concedida, um tela com uma frase dizendo que a janela pode ser fechada será emitida.
+Com a permissão concedida, uma tela com uma frase dizendo que a janela pode ser fechada será emitida.
 
 O programa vai continuar rodando.
+Sem a autenticação no navegador, o programa não vai seguir para a leitura e edição.
 
 Com a leitura bem sucedida, ele vai mostrar na tela os dados lidos.
 Depois, ele mostrará logs de acompanhamento de quantos cálculos estão prontos.
@@ -71,7 +75,7 @@ Pronto, sua planilha está calculada.
 
 3 - COM ferramentas de desenvolvedor, PODENDO VER TUDO.
 
-Se você tem ferramentas de desenvolverdor insalados, tem alguma experiência em TI.
+Se você tem ferramentas de desenvolverdor insaladas, tem alguma experiência em TI.
 Portanto, serei menos detalhista.
 
 Tenha instalado Gradle e uma JDK (JDK do Java 8 no mínimo) do seu computador.
